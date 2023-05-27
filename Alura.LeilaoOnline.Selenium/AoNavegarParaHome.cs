@@ -1,3 +1,4 @@
+using Alura.LeilaoOnline.Selenium.Fixtures;
 using Alura.LeilaoOnline.Selenium.Helpers;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -8,14 +9,14 @@ using Xunit;
 
 namespace Alura.LeilaoOnline.Selenium
 {
-    public class AoNavegarParaHome : IDisposable
+    public class AoNavegarParaHome : IClassFixture<TestFixture>
     {
         IWebDriver driver;
 
         //Setup
-        public AoNavegarParaHome()
+        public AoNavegarParaHome(TestFixture fixture)
         {
-            driver = new ChromeDriver(TestHelper.PastaDoExecutavel);
+            driver = fixture.Driver;
         }
 
         [Fact]
