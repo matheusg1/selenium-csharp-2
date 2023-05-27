@@ -75,8 +75,8 @@ namespace Alura.LeilaoOnline.Selenium.Testes
 
             //Assert
             IWebElement elemento = driver.FindElement(By.CssSelector("span.msg-erro[data-valmsg-for='Nome']"));
-            Assert.True(elemento.Displayed);
-
+            
+            Assert.False(string.IsNullOrEmpty(elemento.Text));
         }
 
         [Fact]
@@ -91,8 +91,8 @@ namespace Alura.LeilaoOnline.Selenium.Testes
 
             //Assert
             IWebElement elemento = driver.FindElement(By.CssSelector("span.msg-erro[data-valmsg-for='Email']"));
-            Assert.True(elemento.Displayed);
-
+            
+            Assert.Equal("The Endereço de Email field is required.", elemento.Text);
         }
     }
 }
