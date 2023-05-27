@@ -9,7 +9,8 @@ using Xunit;
 
 namespace Alura.LeilaoOnline.Selenium
 {
-    public class AoNavegarParaHome : IClassFixture<TestFixture>
+    [Collection("Chrome Driver")]
+    public class AoNavegarParaHome 
     {
         IWebDriver driver;
 
@@ -42,11 +43,6 @@ namespace Alura.LeilaoOnline.Selenium
 
             //Assert
             Assert.Contains("Próximos Leilões", driver.PageSource);
-        }
-
-        public void Dispose()
-        {
-            driver.Quit();         
         }
     }
 }
