@@ -1,9 +1,11 @@
 ﻿using Alura.LeilaoOnline.Selenium.Fixtures;
+using Alura.LeilaoOnline.Selenium.PageObjects;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -24,15 +26,13 @@ namespace Alura.LeilaoOnline.Selenium.Testes
         public void DadoInformacoesValidasDeveIrParaPaginaDeAgradecimento()
         {
             //Arrange
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            var registroPO = new RegistroPO(driver);
+            registroPO.Visitar();
 
-            driver.FindElement(By.Id("Nome")).SendKeys("Matheus");
-            driver.FindElement(By.Id("Email")).SendKeys("mat@email.com");
-            driver.FindElement(By.Id("Password")).SendKeys("adm");
-            driver.FindElement(By.Id("ConfirmPassword")).SendKeys("adm");
+            registroPO.PreencheFormulario("math", "mat@email.com", "adm", "adm");
 
             //Act
-            driver.FindElement(By.Id("btnRegistro")).Click();
+            registroPO.SubmeteFormulario();
 
             //Assert
             Assert.Contains("Obrigado", driver.PageSource);
@@ -49,15 +49,12 @@ namespace Alura.LeilaoOnline.Selenium.Testes
         public void DadoInformacoesInvalidasDeveContinuarNaHome(string nome, string email, string password, string confirmPassword)
         {
             //Arrange
-            driver.Navigate().GoToUrl("http://localhost:5000");
-
-            driver.FindElement(By.Id("Nome")).SendKeys(nome);
-            driver.FindElement(By.Id("Email")).SendKeys(email);
-            driver.FindElement(By.Id("Password")).SendKeys(password);
-            driver.FindElement(By.Id("ConfirmPassword")).SendKeys(confirmPassword);
+            var registroPO = new RegistroPO(driver);
+            registroPO.Visitar();
+            registroPO.PreencheFormulario(nome, email, password, confirmPassword);
 
             //Act
-            driver.FindElement(By.Id("btnRegistro")).Click();
+            registroPO.SubmeteFormulario();            
 
             //Assert
             Assert.Contains("section-registro", driver.PageSource);
@@ -67,32 +64,29 @@ namespace Alura.LeilaoOnline.Selenium.Testes
         public void DadoNomeEmBrancoMostrarMensagemDeErro()
         {
             //Arrange
-            driver.Navigate().GoToUrl("http://localhost:5000");
-            //driver.FindElement(By.Id("Nome")).SendKeys(string.Empty);
+            var registroPO = new RegistroPO(driver);
+            registroPO.Visitar();
 
             //Act
-            driver.FindElement(By.Id("btnRegistro")).Click();
+            registroPO.SubmeteFormulario();
 
-            //Assert
-            IWebElement elemento = driver.FindElement(By.CssSelector("span.msg-erro[data-valmsg-for='Nome']"));
-            
-            Assert.False(string.IsNullOrEmpty(elemento.Text));
+            //Assert            
+            Assert.False(string.IsNullOrEmpty(registroPO.NomeMensagemErro));
         }
 
         [Fact]
         public void DadoEmailInvalidoDeveMostrarMensagemDeErro()
         {
             //Arrange
-            driver.Navigate().GoToUrl("http://localhost:5000");            
-            driver.FindElement(By.Id("Email")).SendKeys(string.Empty);
+            var registroPO = new RegistroPO(driver);
+
+            registroPO.Visitar();            
 
             //Act
-            driver.FindElement(By.Id("btnRegistro")).Click();
+            registroPO.SubmeteFormulario();            
 
-            //Assert
-            IWebElement elemento = driver.FindElement(By.CssSelector("span.msg-erro[data-valmsg-for='Email']"));
-            
-            Assert.Equal("The Endereço de Email field is required.", elemento.Text);
+            //Assert                        
+            Assert.Equal("The Endereço de Email field is required.", registroPO.EmailMensagemErro);
         }
     }
 }
