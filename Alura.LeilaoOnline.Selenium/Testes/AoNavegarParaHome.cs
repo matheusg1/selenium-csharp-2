@@ -7,10 +7,10 @@ using System.IO;
 using System.Reflection;
 using Xunit;
 
-namespace Alura.LeilaoOnline.Selenium
+namespace Alura.LeilaoOnline.Selenium.Testes
 {
     [Collection("Chrome Driver")]
-    public class AoNavegarParaHome 
+    public class AoNavegarParaHome
     {
         IWebDriver driver;
 
